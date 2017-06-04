@@ -13,5 +13,10 @@ market price:
 TICKER:SYMBOL:MARKET [{date(timestamp), last(%.08f), bid(%.08f), ask(%.08f)}]
 
 transactions:
-TRANSACTION:SYMBOL:MARKET:OWNER [{date(timestamp), amount(%.08f), direction(0 deposit|1 withdraw), balance(before transaction), percentage(%.08f percentage after transaction), memo}]
+TRANSACTION:SYMBOL:MARKET [{date(timestamp), amount(%.08f), direction(0 deposit|1 withdraw), balance(before transaction), owner, memo}]
 
+balance sheet:
+BALANCE:SYMBOL:MARKET {'date':date, 'total':total, 'shares':{'owner1':percentage1,...}}
+
+balance sheet snapshot:
+SNAPSHOT:SYMBOL:MARKET [{'date':date, 'balance':{}}]

@@ -44,8 +44,13 @@ def dec(num):
   '''Convert num to decimal string'''
   return format(Decimal(num), '.8f')
 
+def dec20(num):
+  '''Convert num to decimal string'''
+  return format(Decimal(num), '.20f')
+
 if __name__ == "__main__":
   print Truncate(1.012456, 4)
   print "%.04f"%1.012456
   print GetTimestamp()
   print dec(0.1111111111)
+  print dec20(0.1111111111)

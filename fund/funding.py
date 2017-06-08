@@ -53,7 +53,7 @@ def CalculateBalaneSheet(transaction, balance_sheet = None):
   [tx_date, amount, direction, total, owner, memo] = transaction
   if balance_sheet == None:
     date = GetTimestamp()
-    balance_sheet = {'date':date, 'total':total, 'shares':{'omega':'100'}}
+    balance_sheet = {'date':date, 'total':"0.0", 'shares':{'omega':'100'}}
   else:
     print balance_sheet
     balance_sheet = json.loads(balance_sheet)
@@ -80,16 +80,12 @@ def CalculateBalaneSheet(transaction, balance_sheet = None):
   agent_shares = {}
   for agent in agent_balance:
     percentage = agent_balance[agent] / new_total
-    agent_shares[agent] = dec(percentage * 100)
+    # use high precision for shares
+    agent_shares[agent] = dec20(percentage * 100)
   new_sheet['shares'] = agent_shares
   return new_sheet
 
 if __name__ == '__main__':
-  CreateFundingTx('BITFINEX', 'USD', '1000.0', True, 'zeta', 'test')
-  CreateFundingTx('BITFINEX', 'USD', '1000.0', False, 'zeta', 'test')
-  CreateFundingTx('BITFINEX', 'USD', '1000.0', True, 'zeta', 'test')
-  CreateFundingTx('BITFINEX', 'USD', '1000.0', True, 'zeta', 'test')
-  CreateFundingTx('BITFINEX', 'USD', '2000.0', True, 'hh', 'test')
-  CreateFundingTx('BITFINEX', 'USD', '1000.0', False, 'omega', 'test')
-  CreateFundingTx('BITFINEX', 'USD', '1000.0', True, 'zeta', 'test')
-  CreateFundingTx('BITFINEX', 'USD', '1000.0', True, 'zeta', 'test')
+  CreateFundingTx('BITFINEX', 'USD', '162163.7', True, 'omega', 'test')
+  CreateFundingTx('BITFINEX', 'USD', '184247.55', True, 'alpha', 'init')
+  CreateFundingTx('BITFINEX', 'USD', '56372.0', True, 'beta', 'init')

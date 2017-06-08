@@ -30,12 +30,12 @@ class MarketData():
   def __init__(self):
     self.bitfinex = Bitfinex(bitfinex_key, bitfinex_secret)
     self.r = redis.StrictRedis(host='localhost', port=6379, db=0)
-    self.r.flushall()
+    #self.r.flushall()
 
   def UpdateAll(self):
     self.UpdateBitfinex()
 
-  def UpdateBitfinex(self):
+  def UpdateLedger(self):
     balance = self.bitfinex.balances()
     # Update ledger
     date = GetTimestamp()
@@ -52,6 +52,9 @@ class MarketData():
         redis_key = "LEDGER:%s:BITFINEX:%s" %(ticker, wallet)
         self.r.set(redis_key, json.dumps(ledger[ticker][wallet]))
         print redis_key, self.r.get(redis_key)
+
+  def UpdateBitfinex(self):
+    self.UpdateLedger()
     # Update ticker
     query = ['BTCUSD', 'ETHUSD', 'ETHBTC', 'ETCUSD', 'ETCBTC', 'ZECUSD', 'ZECBTC', 'XMRUSD', 'XMRBTC', 'LTCUSD', 'LTCBTC', 'XRPUSD', 'XRPBTC', 'DASHUSD', 'DASHBTC']
     result_query = map(lambda x:'t'+x, query)

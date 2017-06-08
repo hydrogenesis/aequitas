@@ -61,7 +61,7 @@ def GenerateHTML(html):
         </style>
         </head><body>\n""")
     f.write('Date: %s\n'% datetime.datetime.fromtimestamp(int(ldate)/1000 + 8*3600).strftime('%Y/%m/%d %H:%M:%S'))
-    f.write('<table border="1" cellpadding="0" cellspacing="0" style="font-size:20pt;min-width:900px;">\n')
+    f.write('<table border="1" cellpadding="2" cellspacing="0" style="font-size:20pt;min-width:900px;">\n')
     f.write("<tr><th>Owner</th><th>Position</th><th>Shares</th></tr>\n")
     balance_history = {}
     for owner in balance_sheet['shares']:
@@ -87,21 +87,37 @@ def GenerateHTML(html):
         if not the_date in balance_history:
           balance_history[the_date] = {}
         balance_history[the_date][owner] = day_data
+      days = len(history)
     print balance_history
     f.write("<tr><td>Total</td><td>$%.02f</td><td></td></tr>\n" % (Decimal(ltotal)))
     f.write('</table>\n')
-    f.write('History\n<table border="1" cellpadding="0" cellspacing="0" style="font-size:20pt;min-width:900px;">\n')
+    f.write('History (portfolio, last profit, equivalent annual return)\n')
+    f.write('<table border="1" cellpadding="2" cellspacing="0" style="font-size:14pt;min-width:900px;">\n')
     headers = "</th><th>".join(owners)
     f.write("<tr><th>Date</th><th>%s</th></tr>\n"%headers)
+    balance_array = {}
+    date_array = []
     for date in balance_history:
+      date_array.append(date)
+      for owner in owners:
+        if not owner in balance_array:
+          balance_array[owner] = []
+        if not owner in balance_history[date]:
+          balance_array[owner].append([0.0, 0.0])
+        else:
+          oldbalance = Decimal(balance_history[date][owner][1])
+          if len(balance_array[owner]) > 0:
+            newbalance = Decimal(balance_array[owner][-1][0])
+            profit = newbalance - oldbalance
+            balance_array[owner][-1][1] = profit
+          balance_array[owner].append([oldbalance, 0.0])
+    for day in range(days):
       data = []
       for owner in owners:
-        if not owner in balance_history[date]:
-          data.append("$0.00")
-        else:
-          data.append("$%.02f" %Decimal(balance_history[date][owner][1]))
+        data.append("$%.02f, $%.02f, %.02f%%" % (balance_array[owner][day][0], balance_array[owner][day][1],
+          Decimal(balance_array[owner][day][1]) / (balance_array[owner][day][0]+Decimal(0.00001)) * 100 * 365))
       body = "</td><td>".join(data)
-      f.write("<tr><td>%s</td><td>%s</td></tr>\n"%(date, body))
+      f.write("<tr><td>%s</td><td>%s</td></tr>\n"%(date_array[day], body))
     f.write('</table>\n')
     f.write('</body></html>\n')
 

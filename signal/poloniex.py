@@ -37,7 +37,7 @@ def RetrieveChart(ticker, start, end, period):
   r = requests.get(url)
   return r.json()
 
-def UpdateData(period=86400*200, interval=86400):
+def UpdateData(period=86400*60, interval=12*3600):
   tickers = GetTicker()
   data = {}
   now = int(time.time())
@@ -51,7 +51,10 @@ def UpdateData(period=86400*200, interval=86400):
     f.write(json.dumps(data, indent=2))
 
 if __name__ == '__main__':
-  #UpdateData()
+  period = 86400*60
+  interval=4*3600
+  bar_num = period / interval
+  UpdateData(period=period, interval=interval)
   slippery = 0.005
   with open('poloniex.json', 'r') as f:
     data = json.load(f)
@@ -60,7 +63,7 @@ if __name__ == '__main__':
   tickers = []
   for ticker in data:
     daily = []
-    if len(data[ticker]) != 200:
+    if len(data[ticker]) != bar_num:
       print ticker, len(data[ticker])
       continue
     days = 0

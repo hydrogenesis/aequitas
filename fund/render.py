@@ -97,7 +97,7 @@ def GenerateHTML(html):
     f.write("<tr><th>Date</th><th>%s</th></tr>\n"%headers)
     balance_array = {}
     date_array = []
-    for date in balance_history:
+    for date in sorted(balance_history.keys(), reverse=True):
       date_array.append(date)
       for owner in owners:
         if not owner in balance_array:
@@ -111,6 +111,7 @@ def GenerateHTML(html):
             profit = newbalance - oldbalance
             balance_array[owner][-1][1] = profit
           balance_array[owner].append([oldbalance, 0.0])
+    print balance_array
     for day in range(days):
       data = []
       for owner in owners:

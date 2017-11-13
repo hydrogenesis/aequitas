@@ -51,11 +51,11 @@ def UpdateData(period=86400*60, interval=12*3600):
     f.write(json.dumps(data, indent=2))
 
 if __name__ == '__main__':
-  period = 86400*60
-  interval=4*3600
+  period = 86400*30
+  interval=24*3600
   bar_num = period / interval
-  UpdateData(period=period, interval=interval)
-  slippery = 0.005
+  #UpdateData(period=period, interval=interval)
+  slippery = 0.0000
   with open('poloniex.json', 'r') as f:
     data = json.load(f)
   portfolio = {'BTC': 100.0}

@@ -58,7 +58,9 @@ def CalculateBalaneSheet(transaction, balance_sheet = None):
     print balance_sheet
     balance_sheet = json.loads(balance_sheet)
   original_balance = Decimal(0.0)
-  original_total = Decimal(balance_sheet['total'])
+  # We don't need history  total now. only the reality matters.
+  original_total = Decimal(total)
+  #original_total = Decimal(balance_sheet['total'])
   if owner in balance_sheet['shares']:
     original_balance = Decimal(balance_sheet['shares'][owner]) / 100 * original_total
   dec_amount = Decimal(amount)
@@ -86,6 +88,8 @@ def CalculateBalaneSheet(transaction, balance_sheet = None):
   return new_sheet
 
 if __name__ == '__main__':
-  CreateFundingTx('BITFINEX', 'USD', '162163.7', True, 'omega', 'test')
-  CreateFundingTx('BITFINEX', 'USD', '184247.55', True, 'alpha', 'init')
-  CreateFundingTx('BITFINEX', 'USD', '56372.0', True, 'beta', 'init')
+  #CreateFundingTx('BITFINEX', 'USD', '162163.7', True, 'omega', 'test')
+  #CreateFundingTx('BITFINEX', 'USD', '184247.55', True, 'alpha', 'init')
+  #CreateFundingTx('BITFINEX', 'USD', '56372.0', True, 'beta', 'init')
+  #CreateFundingTx('BITFINEX', 'USD', '85706.34167838', True, 'beta', 'deposit 0.6m')
+  CreateFundingTx('BITFINEX', 'USD', '11760.0', False, 'alpha', 'withdraw to buy 2 bitcoins')
